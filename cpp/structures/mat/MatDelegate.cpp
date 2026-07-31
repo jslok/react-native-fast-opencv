@@ -90,7 +90,7 @@ jsi::Value MatDelegate::get(jsi::Runtime& rt, const std::string& propName, const
       return jsi::Function::createFromHostFunction(
           rt, jsi::PropNameID::forAscii(rt, "saveToFile"), 3,
           [object](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
-              if (count < 4) {
+              if (count < 3) {
                   throw std::runtime_error("saveToFile requires 3 arguments: path, format, compression");
               }
             
