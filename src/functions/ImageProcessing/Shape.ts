@@ -126,6 +126,13 @@ export type Shape = {
   ): void;
 
   /**
+   * Fits an ellipse around a set of 2D points.
+   * @param points Input 2D point set, stored in a Mat or PointVector. It should contain at least 5 points.
+   * @returns the rotated rectangle in which the ellipse is inscribed
+   */
+  fitEllipse(points: Mat | PointVector): RotatedRect;
+
+  /**
    * Fits a line to a 2D or 3D point set.
    * @param points Input vector of 2D or 3D points, stored in a Mat.
    * @param line Output line parameters. In case of 2D fitting, it should be a vector of 4 elements (like Vec4f) - (vx, vy, x0, y0), where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is a point on the line. In case of 3D fitting, it should be a vector of 6 elements (like Vec6f) - (vx, vy, vz, x0, y0, z0), where (vx, vy, vz) is a normalized vector collinear to the line and (x0, y0, z0) is a point on the line

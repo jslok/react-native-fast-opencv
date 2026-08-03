@@ -234,11 +234,11 @@ Represents a rotated rectangle.
 
 **Properties:**
 - `type`: `ObjectType.RotatedRect`
-- `x`: `number`
-- `y`: `number`
-- `width`: `number`
-- `height`: `number`
-- `angle`: `number`
+- `x`: `number` - center x coordinate
+- `y`: `number` - center y coordinate
+- `width`: `number` - full width of the rotated rectangle
+- `height`: `number` - full height of the rotated rectangle
+- `angle`: `number` - rotation angle in degrees
 
 **Methods:**
 - `release(): void`

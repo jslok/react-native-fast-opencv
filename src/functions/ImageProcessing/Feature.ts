@@ -1,5 +1,10 @@
 import type { HoughModes } from '../../constants/ImageProcessing';
-import type { Mat } from '../../objects/Objects';
+import type {
+  Mat,
+  Point2fVector,
+  Size,
+  TermCriteria,
+} from '../../objects/Objects';
 
 export type Feature = {
   /**
@@ -42,13 +47,43 @@ export type Feature = {
    * @param maxCorners Maximum number of corners to return. If there are more corners than are found, the strongest of them is returned. maxCorners <= 0 implies that no limit on the maximum is set and all detected corners are returned
    * @param qualityLevel Parameter characterizing the minimal accepted quality of image corners. The parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue (see cornerMinEigenVal ) or the Harris function response (see cornerHarris ). The corners with the quality measure less than the product are rejected. For example, if the best corner has the quality measure = 1500, and the qualityLevel=0.01 , then all the corners with the quality measure less than 15 are rejected.
    * @param minDistance Minimum possible Euclidean distance between the returned corners
+   * @param blockSize Size of an average block for computing a derivative covariation matrix over each pixel neighborhood. Default is 3
+   * @param useHarrisDetector Parameter indicating whether to use a Harris detector (see cornerHarris) or cornerMinEigenVal. Default is false
+   * @param k Free parameter of the Harris detector. Default is 0.04
    */
   goodFeaturesToTrack(
     image: Mat,
-    corners: Mat,
+    corners: Mat | Point2fVector,
     maxCorners: number,
     qualityLevel: number,
-    minDistance: number
+    minDistance: number,
+    blockSize?: number,
+    useHarrisDetector?: boolean,
+    k?: number
+  ): void;
+
+  /**
+   * Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with pyramids
+   * @param prevImg First 8-bit input image or pyramid constructed by buildOpticalFlowPyramid
+   * @param nextImg Second input image or pyramid of the same size and the same type as prevImg
+   * @param prevPts Vector of 2D points for which the flow needs to be found
+   * @param nextPts Output vector of 2D points containing the calculated new positions of input features in the second image
+   * @param status Output status vector (1 if the flow for the corresponding feature has been found, otherwise 0)
+   * @param err Output vector of errors; each element of the vector is set to an error for the corresponding feature
+   * @param winSize Size of the search window at each pyramid level
+   * @param maxLevel 0-based maximal pyramid level number
+   * @param criteria Parameter specifying the termination criteria of the iterative search algorithm
+   */
+  calcOpticalFlowPyrLK(
+    prevImg: Mat,
+    nextImg: Mat,
+    prevPts: Point2fVector,
+    nextPts: Point2fVector,
+    status: Mat,
+    err: Mat,
+    winSize: Size,
+    maxLevel: number,
+    criteria: TermCriteria
   ): void;
 
   /**

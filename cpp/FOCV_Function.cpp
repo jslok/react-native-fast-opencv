@@ -953,13 +953,18 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
       } break;
       case hashString("drawContours", 12): {
         auto img = args.asMatPtr(1);
-        auto contours = args.asMatVectorPtr(2);
         auto contourIdx = args.asNumber(3);
         auto color = args.asScalarPtr(4);
         auto thickness = args.asNumber(5);
         auto line_type = args.asNumber(6);
-        
-        cv::drawContours(*img, *contours, contourIdx, *color, thickness, line_type);
+
+        if (args.isMatVector(2)) {
+          auto contours = args.asMatVectorPtr(2);
+          cv::drawContours(*img, *contours, contourIdx, *color, thickness, line_type);
+        } else {
+          auto contours = args.asPointVectorOfVectorsPtr(2);
+          cv::drawContours(*img, *contours, contourIdx, *color, thickness, line_type);
+        }
       } break;
       case hashString("drawMarker", 10): {
         auto img = args.asMatPtr(1);
@@ -1000,11 +1005,16 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
       } break;
       case hashString("fillPoly", 8): {
         auto img = args.asMatPtr(1);
-        auto pts = args.asMatVectorPtr(2);
         auto color = args.asScalarPtr(3);
         auto line_type = args.asNumber(4);
-        
-        cv::fillPoly(*img, *pts, *color, line_type);
+
+        if (args.isMatVector(2)) {
+          auto pts = args.asMatVectorPtr(2);
+          cv::fillPoly(*img, *pts, *color, line_type);
+        } else {
+          auto pts = args.asPointVectorOfVectorsPtr(2);
+          cv::fillPoly(*img, *pts, *color, line_type);
+        }
       } break;
       case hashString("line", 4): {
         auto img = args.asMatPtr(1);
@@ -1018,13 +1028,18 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
       } break;
       case hashString("polylines", 9): {
         auto img = args.asMatPtr(1);
-        auto pts = args.asMatVectorPtr(2);
         auto isClosed = args.asBool(3);
         auto color = args.asScalarPtr(4);
         auto thickness = args.asNumber(5);
         auto line_type = args.asNumber(6);
-        
-        cv::polylines(*img, *pts, isClosed, *color, thickness, line_type);
+
+        if (args.isMatVector(2)) {
+          auto pts = args.asMatVectorPtr(2);
+          cv::polylines(*img, *pts, isClosed, *color, thickness, line_type);
+        } else {
+          auto pts = args.asPointVectorOfVectorsPtr(2);
+          cv::polylines(*img, *pts, isClosed, *color, thickness, line_type);
+        }
       } break;
       case hashString("rectangle", 9): {
         auto img = args.asMatPtr(1);
@@ -1062,12 +1077,40 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
       } break;
       case hashString("goodFeaturesToTrack", 19): {
         auto image = args.asMatPtr(1);
-        auto corners = args.asMatPtr(2);
         auto maxCorners = args.asNumber(3);
         auto qualityLevel = args.asNumber(4);
         auto minDistance = args.asNumber(5);
-        
-        cv::goodFeaturesToTrack(*image, *corners, maxCorners, qualityLevel, minDistance);
+        auto blockSize = count > 6 ? args.asNumber(6) : 3;
+        auto useHarrisDetector = count > 7 ? args.asBool(7) : false;
+        auto k = count > 8 ? args.asNumber(8) : 0.04;
+
+        if (args.isPoint2fVector(2)) {
+          auto corners = args.asPoint2fVectorPtr(2);
+          cv::goodFeaturesToTrack(
+            *image,
+            *corners,
+            maxCorners,
+            qualityLevel,
+            minDistance,
+            cv::noArray(),
+            blockSize,
+            useHarrisDetector,
+            k
+          );
+        } else {
+          auto corners = args.asMatPtr(2);
+          cv::goodFeaturesToTrack(
+            *image,
+            *corners,
+            maxCorners,
+            qualityLevel,
+            minDistance,
+            cv::noArray(),
+            blockSize,
+            useHarrisDetector,
+            k
+          );
+        }
       } break;
       case hashString("HoughCircles", 12): {
         auto image = args.asMatPtr(1);
@@ -1494,6 +1537,17 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
         }
         
       } break;
+      case hashString("fitEllipse", 10): {
+        cv::RotatedRect rect;
+
+        if (args.isMat(1)) {
+          rect = cv::fitEllipse(*args.asMatPtr(1));
+        } else {
+          rect = cv::fitEllipse(*args.asPointVectorPtr(1));
+        }
+
+        return FOCV_JsiObject::wrap(runtime, "rotated_rect", std::make_shared<cv::RotatedRect>(rect));
+      } break;
       case hashString("fitLine", 7): {
         auto points = args.asMatPtr(1);
         auto line = args.asMatPtr(2);
@@ -1684,9 +1738,61 @@ jsi::Object FOCV_Function::invoke(jsi::Runtime& runtime, const jsi::Value* argum
         return FOCV_JsiObject::wrap(runtime, "mat", std::make_shared<cv::Mat>(H));
       } break;
 
+      case hashString("calcOpticalFlowPyrLK", 19): {
+        auto prevImg = args.asMatPtr(1);
+        auto nextImg = args.asMatPtr(2);
+        auto prevPts = args.asPoint2fVectorPtr(3);
+        auto nextPts = args.asPoint2fVectorPtr(4);
+        auto status = args.asMatPtr(5);
+        auto err = args.asMatPtr(6);
+        auto winSize = args.asSizePtr(7);
+        auto maxLevel = args.asNumber(8);
+        auto criteria = args.asTermCriteriaPtr(9);
+
+        cv::calcOpticalFlowPyrLK(
+          *prevImg,
+          *nextImg,
+          *prevPts,
+          *nextPts,
+          *status,
+          *err,
+          *winSize,
+          maxLevel,
+          *criteria
+        );
+      } break;
+
+      case hashString("estimateAffinePartial2D", 22): {
+        auto from = args.asPoint2fVectorPtr(1);
+        auto to = args.asPoint2fVectorPtr(2);
+        auto inliers = args.asMatPtr(3);
+        auto method = count > 4 ? static_cast<int>(args.asNumber(4)) : cv::RANSAC;
+        auto ransacReprojThreshold = count > 5 ? args.asNumber(5) : 3.0;
+        auto maxIters = count > 6 ? static_cast<size_t>(args.asNumber(6)) : 2000;
+        auto confidence = count > 7 ? args.asNumber(7) : 0.99;
+        auto refineIters = count > 8 ? static_cast<size_t>(args.asNumber(8)) : 10;
+
+        cv::Mat transform = cv::estimateAffinePartial2D(
+          *from,
+          *to,
+          *inliers,
+          method,
+          ransacReprojThreshold,
+          maxIters,
+          confidence,
+          refineIters
+        );
+
+        return FOCV_JsiObject::wrap(runtime, "mat", std::make_shared<cv::Mat>(transform));
+      } break;
+
       // ================== END FEATURE MATCHING FUNCTIONS ==================
     }
   } catch (cv::Exception& e) {
+    std::string message(e.what());
+    std::cout << "Fast OpenCV Invoke Error: " << message << "\n";
+    throw std::runtime_error("Fast OpenCV Error: " + message);
+  } catch (std::exception& e) {
     std::string message(e.what());
     std::cout << "Fast OpenCV Invoke Error: " << message << "\n";
     throw std::runtime_error("Fast OpenCV Error: " + message);

@@ -18,6 +18,12 @@ const items: ItemDetails[] = [
     route: Route.ImageBlur,
   },
   {
+    title: 'Fit Ellipse',
+    emoji: '🟠',
+    description: 'Fit and draw an ellipse from contour points',
+    route: Route.FitEllipse,
+  },
+  {
     title: 'Camera Passthrough',
     emoji: '📷',
     description: 'Pass camera feed through',

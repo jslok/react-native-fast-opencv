@@ -4,6 +4,7 @@ import type {
   MatVector,
   Point,
   PointVector,
+  PointVectorOfVectors,
   Scalar,
   Size,
 } from '../../objects/Objects';
@@ -57,7 +58,7 @@ export type Drawing = {
    * Draws contours outlines or filled contours.
    * The function draws contour outlines in the image if 𝚝𝚑𝚒𝚌𝚔𝚗𝚎𝚜𝚜≥0 or fills the area bounded by the contours if 𝚝𝚑𝚒𝚌𝚔𝚗𝚎𝚜𝚜<0.
    * @param image Destination image.
-   * @param contours All the input contours. Each contour is stored as a point vector
+   * @param contours All the input contours. Accepts MatVector or PointVectorOfVectors, matching findContours
    * @param contourIdx Parameter indicating a contour to draw. If it is negative, all the contours are drawn.
    * @param color Color of the contours.
    * @param thickness Thickness of lines the contours are drawn with. If it is negative (for example, thickness=FILLED ), the contour interiors are drawn
@@ -65,7 +66,7 @@ export type Drawing = {
    */
   drawContours(
     image: Mat,
-    contours: MatVector,
+    contours: MatVector | PointVectorOfVectors,
     contourIdx: number,
     color: Scalar,
     thickness: number,
@@ -133,11 +134,16 @@ export type Drawing = {
   /**
    * Fills the area bounded by one or more polygons
    * @param img Image
-   * @param pts Array of polygons where each polygon is represented as an array of points
-   * @param color Polygon colo
+   * @param pts Array of polygons where each polygon is represented as an array of points. Accepts MatVector or PointVectorOfVectors
+   * @param color Polygon color
    * @param lineType Type of the polygon boundaries. See LineTypes
    */
-  fillPoly(img: Mat, pts: MatVector, color: Scalar, lineType: LineTypes): void;
+  fillPoly(
+    img: Mat,
+    pts: MatVector | PointVectorOfVectors,
+    color: Scalar,
+    lineType: LineTypes
+  ): void;
 
   /**
    * Draws a line segment connecting two points.
@@ -160,7 +166,7 @@ export type Drawing = {
   /**
    * Draws several polygonal curves
    * @param img Image
-   * @param pts Array of polygonal curves.
+   * @param pts Array of polygonal curves. Accepts MatVector or PointVectorOfVectors
    * @param isClosed Flag indicating whether the drawn polylines are closed or not. If they are closed, the function draws a line from the last vertex of each curve to its first vertex
    * @param color Polyline color
    * @param thickness Thickness of the polyline edges
@@ -168,7 +174,7 @@ export type Drawing = {
    */
   polylines(
     img: Mat,
-    pts: MatVector,
+    pts: MatVector | PointVectorOfVectors,
     isClosed: boolean,
     color: Scalar,
     thickness: number,

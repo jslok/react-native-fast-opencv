@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Home } from './home/Home';
 import { CameraPassthrough } from './examples/CameraPassthrough';
 import { DocumentDetection } from './examples/DocumentDetection';
+import { FitEllipseExample } from './examples/FitEllipseExample';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -23,6 +24,7 @@ export default function App() {
           name={Route.CameraPassthrough}
           component={CameraPassthrough}
         />
+        <Stack.Screen name={Route.FitEllipse} component={FitEllipseExample} />
         <Stack.Screen
           name={Route.CameraRealtimeDetection}
           component={CameraRealtimeDetection}

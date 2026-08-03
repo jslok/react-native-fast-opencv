@@ -1561,10 +1561,41 @@ Determines strong corners on an image
 
 ```js
 OpenCV.goodFeaturesToTrack(image: Mat,
-  corners: Mat,
+  corners: Mat | Point2fVector,
   maxCorners: number,
   qualityLevel: number,
-  minDistance: number
+  minDistance: number,
+  blockSize?: number,
+  useHarrisDetector?: boolean,
+  k?: number
+): void;
+```
+
+### calcOpticalFlowPyrLK
+
+Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with pyramids
+
+- name Function name.
+- prevImg First 8-bit input image
+- nextImg Second input image of the same size and type as prevImg
+- prevPts Vector of 2D points for which the flow needs to be found
+- nextPts Output vector of 2D points containing the calculated new positions of input features in the second image
+- status Output status vector (1 if the flow for the corresponding feature has been found, otherwise 0)
+- err Output vector of errors
+- winSize Size of the search window at each pyramid level
+- maxLevel 0-based maximal pyramid level number
+- criteria Parameter specifying the termination criteria of the iterative search algorithm
+
+```js
+OpenCV.calcOpticalFlowPyrLK(prevImg: Mat,
+  nextImg: Mat,
+  prevPts: Point2fVector,
+  nextPts: Point2fVector,
+  status: Mat,
+  err: Mat,
+  winSize: Size,
+  maxLevel: number,
+  criteria: TermCriteria
 ): void;
 ```
 
@@ -1749,6 +1780,34 @@ Returns the 3x3 perspective transform as a `Mat`.
 OpenCV.findHomographyFromMatches(
   srcPoints: Point2fVector,
   dstPoints: Point2fVector
+): Mat;
+```
+
+### estimateAffinePartial2D
+
+Computes an optimal limited affine transform (4 degrees of freedom) between two 2D point sets.
+
+- from First input 2D point set
+- to Second input 2D point set
+- inliers Output inlier mask
+- method Robust method (`cv::RANSAC` = 8 by default)
+- ransacReprojThreshold Maximum reprojection error in pixels for inliers
+- maxIters Maximum robust-method iterations
+- confidence Confidence level between 0 and 1
+- refineIters Maximum number of refinement iterations
+
+Returns a 2x3 affine transform `Mat`, or an empty `Mat` on failure.
+
+```js
+OpenCV.estimateAffinePartial2D(
+  from: Point2fVector,
+  to: Point2fVector,
+  inliers: Mat,
+  method?: number,
+  ransacReprojThreshold?: number,
+  maxIters?: number,
+  confidence?: number,
+  refineIters?: number
 ): Mat;
 ```
 
@@ -2368,6 +2427,25 @@ OpenCV.findContoursWithHierarchy(image: Mat,
   mode: RetrievalModes,
   method: ContourApproximationModes
 ): void;
+```
+
+### fitEllipse
+
+Fits an ellipse around a set of 2D points.
+
+- points Input 2D point set, stored in a Mat or PointVector. It should contain at least 5 points.
+@returns the rotated rectangle in which the ellipse is inscribed. In this library, `x` and `y` are the ellipse center coordinates, while `width` and `height` are the full axis lengths.
+
+```js
+OpenCV.fitEllipse(points: Mat | PointVector): RotatedRect;
+```
+
+```js
+const ellipse = OpenCV.fitEllipse(contour);
+
+console.log(ellipse.x, ellipse.y); // center
+console.log(ellipse.width, ellipse.height); // full axis lengths
+console.log(ellipse.angle); // degrees
 ```
 
 ### fitLine

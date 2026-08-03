@@ -97,4 +97,28 @@ export type FeatureMatching = {
     srcPoints: Point2fVector,
     dstPoints: Point2fVector
   ): Mat;
+
+  /**
+   * Computes an optimal limited affine transformation with 4 degrees of freedom
+   * between two 2D point sets using RANSAC (or another robust method).
+   * @param from First input 2D point set
+   * @param to Second input 2D point set of matching size and type as from
+   * @param inliers Output inlier mask; nonempty elements mark inliers
+   * @param method Robust method: RANSAC (default) or LMEDS
+   * @param ransacReprojThreshold Maximum reprojection error for a point to be treated as an inlier
+   * @param maxIters Maximum number of robust method iterations
+   * @param confidence Confidence level, between 0 and 1
+   * @param refineIters Maximum number of refinement iterations for refineIters > 0
+   * @returns The 2x3 affine transform matrix, or an empty Mat on failure
+   */
+  estimateAffinePartial2D(
+    from: Point2fVector,
+    to: Point2fVector,
+    inliers: Mat,
+    method?: number,
+    ransacReprojThreshold?: number,
+    maxIters?: number,
+    confidence?: number,
+    refineIters?: number
+  ): Mat;
 };

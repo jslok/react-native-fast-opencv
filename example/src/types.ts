@@ -3,6 +3,7 @@ import type { ParamListBase } from '@react-navigation/native';
 export enum Route {
   Home = 'Home',
   ImageBlur = 'ImageBlur',
+  FitEllipse = 'FitEllipse',
   CameraPassthrough = 'CameraPassthrough',
   CameraRealtimeDetection = 'CameraRealtimeDetection',
   DocumentDetection = 'DocumentDetection',
@@ -11,6 +12,7 @@ export enum Route {
 export interface StackParamList extends ParamListBase {
   Home: undefined;
   ImageBlur: undefined;
+  FitEllipse: undefined;
   CameraPassthrough: undefined;
   CameraRealtimeDetection: undefined;
   DocumentDetection: undefined;
