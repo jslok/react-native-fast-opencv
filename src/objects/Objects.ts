@@ -57,12 +57,12 @@ export declare class Mat {
     channels: number;
     buffer: Float64Array;
   };
-  saveToFile(path: string): void;
+  saveToFile(path: string, format: 'jpeg' | 'png', compression: number): void;
 
   static create(
-    rows?: number,
-    cols?: number,
-    dataType?: DataTypes,
+    rows: number,
+    cols: number,
+    dataType: DataTypes,
     data?: number[]
   ): Mat;
   static createFromBase64(base64: string): Mat;

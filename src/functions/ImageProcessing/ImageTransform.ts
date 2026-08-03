@@ -3,7 +3,7 @@ import type { InterpolationFlags } from '../../constants/ImageTransform';
 import type {
   Mat,
   Point2f,
-  PointVector,
+  Point2fVector,
   Scalar,
   Size,
 } from '../../objects/Objects';
@@ -17,8 +17,8 @@ export type ImageTransform = {
    * @param solveMethod method passed to cv::solve (DecompTypes)
    */
   getPerspectiveTransform(
-    src: PointVector,
-    dst: PointVector,
+    src: Point2fVector,
+    dst: Point2fVector,
     solveMethod: DecompTypes
   ): Mat;
 
