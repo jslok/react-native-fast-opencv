@@ -1,5 +1,5 @@
 PODS:
-  - FastOpencv (0.1.0):
+  - FastOpencv (1.0.0):
     - FastOpenCV-iOS (= 1.0.4)
     - hermes-engine
     - RCTRequired
@@ -2519,7 +2519,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  FastOpencv: 0cb4b0d59ca307dc1be427f9066f507af4397037
+  FastOpencv: 962edf786674f7e124d5a32351147530a7c23ae6
   FastOpenCV-iOS: 2057f306db3ad068577e6fca38411f1b1920d71e
   FBLazyVector: c00c20551d40126351a6783c47ce75f5b374851b
   hermes-engine: ad75cc07fd23dbca94ff20068f53518d89c55bcb

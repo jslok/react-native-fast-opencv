@@ -1571,34 +1571,6 @@ OpenCV.goodFeaturesToTrack(image: Mat,
 ): void;
 ```
 
-### calcOpticalFlowPyrLK
-
-Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with pyramids
-
-- name Function name.
-- prevImg First 8-bit input image
-- nextImg Second input image of the same size and type as prevImg
-- prevPts Vector of 2D points for which the flow needs to be found
-- nextPts Output vector of 2D points containing the calculated new positions of input features in the second image
-- status Output status vector (1 if the flow for the corresponding feature has been found, otherwise 0)
-- err Output vector of errors
-- winSize Size of the search window at each pyramid level
-- maxLevel 0-based maximal pyramid level number
-- criteria Parameter specifying the termination criteria of the iterative search algorithm
-
-```js
-OpenCV.calcOpticalFlowPyrLK(prevImg: Mat,
-  nextImg: Mat,
-  prevPts: Point2fVector,
-  nextPts: Point2fVector,
-  status: Mat,
-  err: Mat,
-  winSize: Size,
-  maxLevel: number,
-  criteria: TermCriteria
-): void;
-```
-
 ### HoughCircles
 
 Finds circles in a grayscale image using the Hough transform
@@ -1780,34 +1752,6 @@ Returns the 3x3 perspective transform as a `Mat`.
 OpenCV.findHomographyFromMatches(
   srcPoints: Point2fVector,
   dstPoints: Point2fVector
-): Mat;
-```
-
-### estimateAffinePartial2D
-
-Computes an optimal limited affine transform (4 degrees of freedom) between two 2D point sets.
-
-- from First input 2D point set
-- to Second input 2D point set
-- inliers Output inlier mask
-- method Robust method (`cv::RANSAC` = 8 by default)
-- ransacReprojThreshold Maximum reprojection error in pixels for inliers
-- maxIters Maximum robust-method iterations
-- confidence Confidence level between 0 and 1
-- refineIters Maximum number of refinement iterations
-
-Returns a 2x3 affine transform `Mat`, or an empty `Mat` on failure.
-
-```js
-OpenCV.estimateAffinePartial2D(
-  from: Point2fVector,
-  to: Point2fVector,
-  inliers: Mat,
-  method?: number,
-  ransacReprojThreshold?: number,
-  maxIters?: number,
-  confidence?: number,
-  refineIters?: number
 ): Mat;
 ```
 

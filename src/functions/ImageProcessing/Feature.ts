@@ -1,10 +1,5 @@
 import type { HoughModes } from '../../constants/ImageProcessing';
-import type {
-  Mat,
-  Point2fVector,
-  Size,
-  TermCriteria,
-} from '../../objects/Objects';
+import type { Mat, Point2fVector } from '../../objects/Objects';
 
 export type Feature = {
   /**
@@ -60,30 +55,6 @@ export type Feature = {
     blockSize?: number,
     useHarrisDetector?: boolean,
     k?: number
-  ): void;
-
-  /**
-   * Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with pyramids
-   * @param prevImg First 8-bit input image or pyramid constructed by buildOpticalFlowPyramid
-   * @param nextImg Second input image or pyramid of the same size and the same type as prevImg
-   * @param prevPts Vector of 2D points for which the flow needs to be found
-   * @param nextPts Output vector of 2D points containing the calculated new positions of input features in the second image
-   * @param status Output status vector (1 if the flow for the corresponding feature has been found, otherwise 0)
-   * @param err Output vector of errors; each element of the vector is set to an error for the corresponding feature
-   * @param winSize Size of the search window at each pyramid level
-   * @param maxLevel 0-based maximal pyramid level number
-   * @param criteria Parameter specifying the termination criteria of the iterative search algorithm
-   */
-  calcOpticalFlowPyrLK(
-    prevImg: Mat,
-    nextImg: Mat,
-    prevPts: Point2fVector,
-    nextPts: Point2fVector,
-    status: Mat,
-    err: Mat,
-    winSize: Size,
-    maxLevel: number,
-    criteria: TermCriteria
   ): void;
 
   /**
